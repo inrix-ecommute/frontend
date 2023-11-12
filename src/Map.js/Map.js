@@ -2,31 +2,65 @@ import { GridItem as Gi } from "@chakra-ui/react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import PlacesInput from "../PlacesInput/PlacesInput";
 import RoutingMachine from "../Routes/RouteMachine";
-import { useContext, useRef, useEffect } from "react";
+import { useContext, useRef, useEffect, useState } from "react";
 import RouteContext from "../store/route-context";
+import { REACT_APP_MAPBOX } from "../keys";
 export default function Map() {
   const {
     route: { location, destination },
+    setRoutes,
+    setLoading,
   } = useContext(RouteContext);
-
+  const [on, setOn] = useState(1);
   const rMac = useRef();
 
-  const onGo = () => {
+  const onGo = async () => {
     if (!rMac.current) return;
     if (!location && !destination) return;
     rMac.current.setWaypoints([
       [location.lat, location.lng],
       [destination.lat, destination.lng],
     ]);
+    const handleAPI = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:8000/getData?location=${location.lat},${location.lng}&destination=${destination.lat},${destination.lng}`
+        );
+        const data = await res.json();
+        console.log(data.data);
+        setRoutes(Object.values(data.data));
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    setLoading(true);
+    await handleAPI();
+    setLoading(false);
   };
+
   useEffect(() => {
     if (!rMac.current) return;
-    if (!location && !destination) return;
+    if (!location || !destination) return;
+    if (!on) return;
     rMac.current.setWaypoints([
       [location.lat, location.lng],
       [destination.lat, destination.lng],
     ]);
-  }, [rMac, location, destination]);
+    setOn(0);
+    const handleAPI = async () => {
+      console.log(location, destination);
+      try {
+        const res = await fetch(
+          `http://localhost:8000/getData?location=${location.lat},${location.lng}&destination=${destination.lat},${destination.lng}`
+        );
+        const data = await res.json();
+        setRoutes(Object.values(data.data));
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    handleAPI();
+  }, [rMac, location, destination, on, setOn, setRoutes]);
 
   return (
     <Gi pos="relative">
@@ -39,7 +73,7 @@ export default function Map() {
       >
         <TileLayer
           attribution='© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZnJhbnptYXQiLCJhIjoiY2xvdW04MXRrMGp1czJscnpzZXRtMmUwNSJ9.wTAtrL3MSHI-wnLaPaLD_Q"
+          url={`https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{y}?access_token=${REACT_APP_MAPBOX}`}
         />
         {location && destination && <RoutingMachine ref={rMac} />}
       </MapContainer>

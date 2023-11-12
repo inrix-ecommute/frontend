@@ -5,6 +5,7 @@ const RouteProvider = ({ children }) => {
   const [destination, setDestination] = useState(null);
   const [location, setLocation] = useState(null);
   const [routes, setRoutes] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const routeContext = {
     route: {
@@ -12,9 +13,11 @@ const RouteProvider = ({ children }) => {
       location,
       routes,
     },
+    loading,
     setDestination,
     setLocation,
     setRoutes,
+    setLoading,
   };
 
   return (

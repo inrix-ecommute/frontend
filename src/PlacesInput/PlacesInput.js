@@ -1,4 +1,4 @@
-import { Box, Input, InputGroup, Button, Text } from "@chakra-ui/react";
+import { Box, Button, Text } from "@chakra-ui/react";
 import { useContext } from "react";
 import SearchInput from "./SearchInput";
 import RouteContext from "../store/route-context";
@@ -44,7 +44,7 @@ export default function PlacesInput({ onGo }) {
           fontWeight="700"
           p="3px 6px"
           borderRadius="30px"
-          mb="2px"
+          mb="3.5px"
         >
           Commute with the earth in mind. Find an eco-friendly route here.
         </Text>

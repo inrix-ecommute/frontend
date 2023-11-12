@@ -6,9 +6,11 @@ const RouteContext = createContext({
     destination: null,
     routes: [],
   },
+  loading: false,
   setRoutes: (route) => {},
   setDestination: (coords) => {},
   setLocation: (coords) => {},
+  setLoading: (bool) => {},
 });
 
 export default RouteContext;

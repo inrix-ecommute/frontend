@@ -4,17 +4,19 @@ import {
   UnorderedList as UOList,
   Text,
   Box,
+  Icon,
 } from "@chakra-ui/react";
+import { LeafIcon } from "../icons/leafIcon";
 
-export default function RouteItem() {
+export default function RouteItem({ name, distance, time, ecoScore, setOpen }) {
   return (
     <Li
       p="1rem 1.4rem"
       pos="relative"
       _notLast={{ borderBottom: "1px solid", borderColor: "gray.100" }}
     >
-      <Heading color="#0f0f0f" fontSize="1.6rem">
-        via Santa Clara
+      <Heading color="#0f0f0f" fontSize="1.65rem" width="85%">
+        {name}
       </Heading>
       <Box
         pos="absolute"
@@ -26,14 +28,23 @@ export default function RouteItem() {
         borderLeftRadius="10px"
         p="5px 10px"
         fontSize="lg"
+        display="flex"
+        alignItems="center"
       >
-        100
+        <Icon as={LeafIcon} fill="#fff" mr="5px" />
+        {ecoScore.toFixed(0)}
       </Box>
-      <UOList fontSize="sm" mb="1">
-        <Li>9 mins</Li>
-        <Li>3.9km</Li>
+      <UOList fontSize="md" mb="1" spacing="1" mt={2}>
+        <Li>{time} mins</Li>
+        <Li>{distance} mi</Li>
       </UOList>
-      <Text fontSize="xs" color="brand.main">
+      <Text
+        fontSize="sm"
+        color="brand.main"
+        onClick={() => setOpen()}
+        cursor="pointer"
+        mt="2"
+      >
         View details
       </Text>
     </Li>
