@@ -2,9 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import App from "./App";
-
+import RouteProvider from "./store/RouteProvider";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import "@fontsource-variable/montserrat";
+import Layout from "./Layout/Layout";
 const theme = extendTheme({
   colors: {
     brand: {
@@ -23,7 +24,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <App />
+      <RouteProvider>
+        <Layout>
+          <App />
+        </Layout>
+      </RouteProvider>
     </ChakraProvider>
   </React.StrictMode>
 );
